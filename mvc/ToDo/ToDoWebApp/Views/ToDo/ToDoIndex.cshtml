@@ -1,0 +1,30 @@
+﻿@model List<ToDoItem>
+@{
+    Layout = null;
+}
+<h1>ToDo Index</h1>
+
+@{
+    var list = Model;
+}
+
+<h1>Total items @list.Count</h1>
+<ul>
+    @foreach(var item in list)
+    {
+        <li>@item.Title</li>
+    }
+</ul>
+
+<table>
+    @foreach (var item in list)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Title)</td>
+            <td>@Html.ActionLink("Edit", "Edit", new { id = item.Id })</td>
+            <td>@Html.ActionLink("Delete", "Delete", new { id = item.Id })</td>
+        </tr>
+    }
+</table>
+
+<p>@Html.ActionLink("Create New Todo", "Create")</p>

@@ -15,12 +15,48 @@ namespace ToDo.Controllers
 
         public IActionResult ToDoIndex() 
         {
-            //var list = new List<object>() { "1","2",3,4,5,};
-            //ViewData["name"] = "Vasya";
-            //ViewBag.Sum = 10000;
-
             var list = _todoListService.GetItemList();
             return View(list); 
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(ToDoItem model)
+        {
+            var id = _todoListService.Create(model);
+            return RedirectToAction("ToDoIndex");
+        }
+
+        public IActionResult Edit(Guid id)
+        {
+            var item = _todoListService.Read(id);
+            return View(item);
+        }
+
+        [HttpPost]
+        public IActionResult Update(ToDoItem model)
+        {
+            _todoListService.Update(model);
+            return RedirectToAction("ToDoIndex");
+        }
+
+        public IActionResult Delete(Guid id)
+        {
+            var item = _todoListService.Read(id);
+            return View(item);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteBackEnd(Guid id)
+        {
+            _todoListService.Delete(id);
+            return RedirectToAction("ToDoIndex");
+        }
+
+
     }
 }

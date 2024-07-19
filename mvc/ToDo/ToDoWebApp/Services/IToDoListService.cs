@@ -5,9 +5,10 @@ namespace ToDo.Services
 {
     public interface IToDoListService
     {
-        Guid Add(ToDoItem item);
-        void Edit(ToDoItem item);
-        void Remove(ToDoItem item);
+        Guid Create(ToDoItem item);
+        ToDoItem Read(Guid id);        
+        void Update(ToDoItem item);
+        void Delete(Guid id);
         List<ToDoItem> GetItemList();
     }
 }

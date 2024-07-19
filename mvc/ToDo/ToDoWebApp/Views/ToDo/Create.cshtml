@@ -1,0 +1,16 @@
+@model ToDoItem
+@{
+    Layout = null;
+}
+<h1>ToDo Create</h1>
+
+<form action="/todo/Create" method="post">
+
+
+    <input type="text" name="Title" />
+
+    <input type="submit" value="Save"/>
+</form>
+
+
+<p>@Html.ActionLink("Cancel", "ToDoIndex")</p>

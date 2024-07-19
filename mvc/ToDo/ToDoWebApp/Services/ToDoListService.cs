@@ -11,9 +11,9 @@ namespace ToDo.Services
 
         public ToDoListService()
         {
-            Add(new ToDoItem { Id = Guid.NewGuid(), Title = "item1", });
-            Add(new ToDoItem { Id = Guid.NewGuid(), Title = "item2", });
-            Add(new ToDoItem { Id = Guid.NewGuid(), Title = "item3", });
+            Create(new ToDoItem { Id = Guid.NewGuid(), Title = "item1", });
+            Create(new ToDoItem { Id = Guid.NewGuid(), Title = "item2", });
+            Create(new ToDoItem { Id = Guid.NewGuid(), Title = "item3", });
         }
 
         public List<ToDoItem> GetItemList()
@@ -24,18 +24,18 @@ namespace ToDo.Services
             return todos;
         }
 
-        public Guid Add(ToDoItem item)
+        public Guid Create(ToDoItem item)
         {
             var id = Guid.NewGuid();
             Storage.Add(id, item.Title);
             return id;
         }
 
-        public void Remove(ToDoItem item)
+        public ToDoItem Read(Guid id)
         {
-            if (Storage.ContainsKey(item.Id))
-            {
-                Storage.Remove(item.Id);
+            if (Storage.ContainsKey(id))
+            {    
+                return new ToDoItem() { Id = id, Title = Storage[id]};
             }
             else
             {
@@ -43,11 +43,16 @@ namespace ToDo.Services
             }
         }
 
-        public void Edit(ToDoItem item)
+        public void Delete(Guid id)
+        {
+            Storage.Remove(id);
+        }
+
+        public void Update(ToDoItem item)
         {
             if (Storage.ContainsKey(item.Id))
             {
-                Storage.Remove(item.Id);
+                Storage[item.Id] = item.Title;
             }
             else
             {

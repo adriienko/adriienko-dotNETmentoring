@@ -1,0 +1,18 @@
+@model ToDoItem
+@{
+    Layout = null;
+}
+<h1>ToDo Delete Confirmation</h1>
+
+<p>
+    Are you sure you want to delete this ToDo Item: @Model.Title?
+</p>
+
+<form action="/todo/DeleteBackEnd" method="post">
+
+    @Html.HiddenFor(model => model.Id)
+    
+    <input type="submit" value="Delete" />
+</form>
+
+<p>@Html.ActionLink("Cancel", "ToDoIndex")</p>

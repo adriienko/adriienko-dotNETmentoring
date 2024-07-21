@@ -7,6 +7,7 @@
 <form action="/todo/Update" method="post">
 
     <input type="text" name="Title" value="@Model.Title"/>
+    @Html.ValidationMessageFor(model => model.Title, null, new { @class = "text-danger" })
     
     @Html.HiddenFor(model => model.Id)
 

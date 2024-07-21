@@ -19,11 +19,6 @@ namespace ToDo.Controllers
             return View(list); 
         }
 
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         [HttpPost]
         public IActionResult Create(ToDoItem model)
         {
@@ -33,14 +28,33 @@ namespace ToDo.Controllers
 
         public IActionResult Edit(Guid id)
         {
-            var item = _todoListService.Read(id);
+            ToDoItem item; 
+            if (id == Guid.Empty)
+            {
+                item = new ToDoItem();
+            }
+            else
+            {
+                item = _todoListService.Read(id);
+            }
             return View(item);
         }
 
         [HttpPost]
         public IActionResult Update(ToDoItem model)
         {
-            _todoListService.Update(model);
+            if (!ModelState.IsValid)
+            {
+                return View("Edit",model);
+            }
+            if (model.Id == Guid.Empty)
+            {
+                _todoListService.Create(model);
+            }
+            else
+            {
+                _todoListService.Update(model);
+            }
             return RedirectToAction("ToDoIndex");
         }
 
@@ -56,7 +70,5 @@ namespace ToDo.Controllers
             _todoListService.Delete(id);
             return RedirectToAction("ToDoIndex");
         }
-
-
     }
 }

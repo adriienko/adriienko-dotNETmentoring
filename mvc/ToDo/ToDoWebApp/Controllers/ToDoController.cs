@@ -20,10 +20,22 @@ namespace ToDo.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ToDoItem model)
+        public IActionResult Save(ToDoItem model)
         {
-            var id = _todoListService.Create(model);
-            return RedirectToAction("ToDoIndex");
+            if (ModelState.IsValid) {
+                if (model.Id == Guid.Empty)
+                {
+                    _todoListService.Create(model);
+                } else {
+                    _todoListService.Update(model);
+                }
+                return RedirectToAction("ToDoIndex");
+            }
+            var messages = string.Join("; ", ModelState.Values
+                                        .SelectMany(x => x.Errors)
+                                        .Select(x => x.ErrorMessage));
+            ViewBag.Vasya = messages;
+            return View("Edit", model);
         }
 
         public IActionResult Edit(Guid id)

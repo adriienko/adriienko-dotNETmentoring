@@ -1,63 +1,60 @@
 ﻿using ToDo.Models;
 
-namespace ToDo.Services
+namespace ToDo.Services;
+public class ToDoListService : IToDoListService
 {
+    private readonly string _notFoudMessage = "item not found";
 
-    public class ToDoListService : IToDoListService
+    private readonly Dictionary<Guid, string> Storage = new Dictionary<Guid, string>();
+
+    public ToDoListService()
     {
-        private readonly string _notFoudMessage = "item not found";
+        Create(new ToDoItem { Id = Guid.NewGuid(), Title = "item1", });
+        Create(new ToDoItem { Id = Guid.NewGuid(), Title = "item2", });
+        Create(new ToDoItem { Id = Guid.NewGuid(), Title = "item3", });
+    }
 
-        private readonly Dictionary<Guid, string> Storage = new Dictionary<Guid, string>();
+    public List<ToDoItem> GetItemList()
+    {
+        List<ToDoItem> todos = Storage.Select(pair =>
+                                    new ToDoItem { Id = pair.Key, Title = pair.Value })
+                                            .ToList();
+        return todos;
+    }
 
-        public ToDoListService()
+    public Guid Create(ToDoItem item)
+    {
+        var id = Guid.NewGuid();
+        Storage.Add(id, item.Title);
+        return id;
+    }
+
+    public ToDoItem Read(Guid id)
+    {
+        if (Storage.ContainsKey(id))
         {
-            Create(new ToDoItem { Id = Guid.NewGuid(), Title = "item1", });
-            Create(new ToDoItem { Id = Guid.NewGuid(), Title = "item2", });
-            Create(new ToDoItem { Id = Guid.NewGuid(), Title = "item3", });
+            return new ToDoItem() { Id = id, Title = Storage[id]};
         }
-
-        public List<ToDoItem> GetItemList()
+        else
         {
-            List<ToDoItem> todos = Storage.Select(pair =>
-                                        new ToDoItem { Id = pair.Key, Title = pair.Value })
-                                             .ToList();
-            return todos;
+            throw new Exception(_notFoudMessage);
         }
+    }
 
-        public Guid Create(ToDoItem item)
+    public void Delete(Guid id)
+    {
+        Storage.Remove(id);
+    }
+
+    public void Update(ToDoItem item)
+    {
+        if (Storage.ContainsKey(item.Id))
         {
-            var id = Guid.NewGuid();
-            Storage.Add(id, item.Title);
-            return id;
+            Storage[item.Id] = item.Title;
         }
-
-        public ToDoItem Read(Guid id)
+        else
         {
-            if (Storage.ContainsKey(id))
-            {    
-                return new ToDoItem() { Id = id, Title = Storage[id]};
-            }
-            else
-            {
-                throw new Exception(_notFoudMessage);
-            }
-        }
-
-        public void Delete(Guid id)
-        {
-            Storage.Remove(id);
-        }
-
-        public void Update(ToDoItem item)
-        {
-            if (Storage.ContainsKey(item.Id))
-            {
-                Storage[item.Id] = item.Title;
-            }
-            else
-            {
-                throw new Exception(_notFoudMessage);
-            }
+            throw new Exception(_notFoudMessage);
         }
     }
 }

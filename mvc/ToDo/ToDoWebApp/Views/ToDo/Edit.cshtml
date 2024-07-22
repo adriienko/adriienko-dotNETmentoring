@@ -2,17 +2,19 @@
 @{
     Layout = null;
 }
-<h1>ToDo Edit</h1>
+<h1>ToDo Save</h1>
 
-<form action="/todo/Update" method="post">
-
+@using (Html.BeginForm("Save", "Todo"))
+{
     <input type="text" name="Title" value="@Model.Title"/>
     @Html.ValidationMessageFor(model => model.Title, null, new { @class = "text-danger" })
-    
+
     @Html.HiddenFor(model => model.Id)
+    @Html.TextBoxFor(model => model.Title)
 
     <input type="submit" value="Save"/>
-</form>
+}
 
+@ViewBag.Vasya
 
 <p>@Html.ActionLink("Cancel", "ToDoIndex")</p>

@@ -1,4 +1,5 @@
-﻿using ToDo.Db;
+﻿using Microsoft.EntityFrameworkCore;
+using ToDo.Db;
 using ToDo.Models;
 
 namespace ToDo.Services;
@@ -24,7 +25,7 @@ public class ToDoListService : IToDoListService
 
     public Guid Create(ToDoItem item)
     {
-        var id = Guid.NewGuid();
+        item.Id = Guid.NewGuid();
         _context.TodoItems.Add(item);
         _context.SaveChanges();
         return item.Id;
@@ -48,9 +49,9 @@ public class ToDoListService : IToDoListService
 
     public void Update(ToDoItem item)
     {
-        var entity = Read(item.Id);
-        
-        entity.Title = item.Title;
+
+        _context.TodoItems.Attach(item);
+        _context.Entry(item).State = EntityState.Modified;
 
         _context.SaveChanges();
     }

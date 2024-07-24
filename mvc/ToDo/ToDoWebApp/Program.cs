@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ToDo;
 using ToDo.Db;
 using ToDo.Models;
 using ToDo.Services;
@@ -9,8 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IToDoListService, ToDoListService>();
 
+var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<TodoDbContext> (option =>
-    option.UseSqlServer("Server=localhost;Database=todoDb;Trusted_Connection=True;TrustServerCertificate=True;"));
+    option.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
@@ -30,4 +32,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+Database.MigrateDatabase(app);
 app.Run();

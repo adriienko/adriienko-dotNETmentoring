@@ -6,6 +6,7 @@ namespace ToDo.Models
     {
         public  Guid Id { get; set; }
 
+        [MaxLength(256)]
         [Required(ErrorMessage = "Title is required.")]
         public string Title { get; set; }
     }

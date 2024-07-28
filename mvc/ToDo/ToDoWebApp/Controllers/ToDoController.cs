@@ -7,10 +7,12 @@ namespace ToDo.Controllers
     public class ToDoController : Controller
     {
         private readonly IToDoListService _todoListService;
+        private readonly DapperRepository _dapperRepository;
 
-        public ToDoController(IToDoListService todoListService)
+        public ToDoController(IToDoListService todoListService, DapperRepository dapperRepository)
         {
             _todoListService = todoListService;
+            _dapperRepository = dapperRepository;
         }
 
         public IActionResult ToDoIndex() 
@@ -69,6 +71,13 @@ namespace ToDo.Controllers
         {
             _todoListService.Delete(id);
             return RedirectToAction("ToDoIndex");
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<ToDoItem>> GetUnfinishedTodos()
+        {
+            var todos = _dapperRepository.GetUnfinishedTodos();
+            return Ok(todos);
         }
     }
 }

@@ -14,6 +14,7 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ToDoEFContext>(option =>
     option.UseSqlServer(connectionString));
 
+builder.Services.AddTransient<DapperRepository>(sp => new DapperRepository(connectionString));
 
 var app = builder.Build();
 

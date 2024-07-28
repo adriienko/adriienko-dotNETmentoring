@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
+using System;
 using ToDo.Db;
 using ToDo.Models;
 
@@ -49,6 +50,7 @@ public class ToDoEfDbListService : IToDoListService
         var entity = Read(item.Id);
 
         entity.Title = item.Title;
+        entity.IsCompleted = item.IsCompleted;
 
         _context.SaveChanges();
     }

@@ -19,6 +19,9 @@
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.Title)</td>
+            <td>
+                <input type="checkbox" @(item.IsCompleted ? "checked" : "") disabled />
+            </td>
             <td>@Html.ActionLink("Edit", "Edit", new { id = item.Id })</td>
             <td>@Html.ActionLink("Delete", "Delete", new { id = item.Id })</td>
         </tr>

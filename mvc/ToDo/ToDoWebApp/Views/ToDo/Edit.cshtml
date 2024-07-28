@@ -11,6 +11,12 @@
     
     @Html.HiddenFor(model => model.Id)
 
+    <div>
+        <label for="IsCompleted">Completed</label>
+        @Html.CheckBoxFor(model => model.IsCompleted)
+        @Html.ValidationMessageFor(model => model.IsCompleted, null, new { @class = "text-danger" })
+    </div>
+
     <input type="submit" value="Save"/>
 </form>
 

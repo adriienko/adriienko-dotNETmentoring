@@ -9,5 +9,7 @@ namespace ToDo.Models
         [MaxLength(256)]
         [Required(ErrorMessage = "Title is required.")]
         public string Title { get; set; }
+
+        public bool IsCompleted { get; set; } = false;
     }
 }

@@ -59,5 +59,10 @@ namespace ToDo.Services
                 throw new Exception(_notFoudMessage);
             }
         }
+
+        public IEnumerable<ToDoItem> GetUnfinishedTodos()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

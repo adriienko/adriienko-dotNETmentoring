@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ToDo;
 using ToDo.Db;
 using ToDo.Models;
@@ -8,13 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IToDoListService, ToDoEfDbListService>();
+//builder.Services.AddScoped<IToDoListService, ToDoEfDbListService>();
 
 var connectionString = builder.Configuration.GetConnectionString("Default");
-builder.Services.AddDbContext<ToDoEFContext>(option =>
-    option.UseSqlServer(connectionString));
-
-builder.Services.AddTransient<DapperRepository>(sp => new DapperRepository(connectionString));
+//builder.Services.AddDbContext<ToDoEFContext>(option =>
+//    option.UseSqlServer(connectionString));
+//builder.Services.AddTransient<DapperRepository>(sp => new DapperRepository(connectionString));
+builder.Services.AddScoped<IToDoListService>(sp => new DapperRepository(connectionString));
 
 var app = builder.Build();
 
@@ -34,6 +35,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-Database.MigrateDatabase(app);
+//Database.MigrateDatabase(app);
 
 app.Run();

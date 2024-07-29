@@ -54,4 +54,10 @@ public class ToDoEfDbListService : IToDoListService
 
         _context.SaveChanges();
     }
+
+    public IEnumerable<ToDoItem> GetUnfinishedTodos()
+    {
+        var list = _context.TodoItems.Where(item => item.IsCompleted).ToList();
+        return list;
+    }
 }

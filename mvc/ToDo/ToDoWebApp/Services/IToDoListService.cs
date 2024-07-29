@@ -10,5 +10,6 @@ namespace ToDo.Services
         void Update(ToDoItem item);
         void Delete(Guid id);
         List<ToDoItem> GetItemList();
+        IEnumerable<ToDoItem> GetUnfinishedTodos();
     }
 }

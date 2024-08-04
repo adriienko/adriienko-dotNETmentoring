@@ -6,10 +6,26 @@ namespace ToDo.Controllers
 {
     public class ToDoController : Controller
     {
-        private readonly IToDoListService _todoListService;
+        private readonly IToDoListSearchableService _todoListService;
         private readonly DapperRepository _dapperRepository;
 
-        public ToDoController(IToDoListService todoListService, DapperRepository dapperRepository)
+        [Route("api/[controller]")]
+        [HttpGet]
+        public IActionResult GetTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            var res = _todoListService.GetPagedItemList(pageSize, page);
+            return Ok(res);
+        }
+
+        [Route("api/[controller]/search")]
+        [HttpGet]
+        public IActionResult SearchTodos([FromQuery] string q)
+        {
+            var res = _todoListService.FindInTitle(q);
+            return Ok(res);
+        }
+
+        public ToDoController(IToDoListSearchableService todoListService, DapperRepository dapperRepository)
         {
             _todoListService = todoListService;
             _dapperRepository = dapperRepository;

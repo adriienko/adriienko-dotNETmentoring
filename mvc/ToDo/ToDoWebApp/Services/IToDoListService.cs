@@ -11,4 +11,10 @@ namespace ToDo.Services
         void Delete(Guid id);
         List<ToDoItem> GetItemList();
     }
+
+    public interface IToDoListSearchableService : IToDoListService
+    {
+        List<ToDoItem> FindInTitle(string s);
+        List<ToDoItem> GetPagedItemList(int size, int page);
+    }
 }

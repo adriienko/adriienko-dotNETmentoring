@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IToDoListService, ToDoEfDbListService>();
+builder.Services.AddScoped<IToDoListSearchableService, ToDoEfDbListService>();
 
 var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<ToDoEFContext>(option =>

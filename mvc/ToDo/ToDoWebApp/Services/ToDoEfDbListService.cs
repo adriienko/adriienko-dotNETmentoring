@@ -6,13 +6,26 @@ using ToDo.Models;
 
 namespace ToDo.Services;
 
-public class ToDoEfDbListService : IToDoListService
+public class ToDoEfDbListService : IToDoListSearchableService
 {
     private readonly ToDoEFContext _context;
 
     public ToDoEfDbListService(ToDoEFContext context)
     {
         _context = context;
+    }
+
+    public List<ToDoItem> FindInTitle(string s)
+    {
+        var list = _context.TodoItems.Where(i => i.Title.Contains(s)).ToList();
+        return list;
+    }
+
+    public List<ToDoItem> GetPagedItemList(int size, int page)
+    {
+        var skip = (page - 1) * size;
+        var list = _context.TodoItems.Skip(skip).Take(size).ToList();
+        return list;
     }
 
     public List<ToDoItem> GetItemList()

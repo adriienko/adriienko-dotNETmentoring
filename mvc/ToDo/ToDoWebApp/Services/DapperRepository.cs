@@ -15,6 +15,71 @@ public class DapperRepository
     {
         _connectionString = connectionString;
         EnsureGetUnfinishedTodosStoredProcedureExists();
+        EnsureGetPagedToDoItemsExists();
+    }
+
+    public void EnsureGetPagedToDoItemsExists()
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            // Check if the stored procedure exists
+            var procedureExists = connection.ExecuteScalar<int>(
+                @"IF EXISTS (SELECT 1 
+                            FROM sys.objects 
+                            WHERE object_id = OBJECT_ID(N'[dbo].[GetPagedToDoItems]') 
+                            AND type in (N'P', N'PC'))
+                  SELECT 1 ELSE SELECT 0");
+
+            if (procedureExists == 0)
+            {
+                // Create the stored procedure if it doesn't exist
+                var createProcedureSql = @"
+                CREATE PROCEDURE GetPagedToDoItems
+                    @PageNumber INT,
+                    @PageSize INT
+                AS
+                BEGIN
+                    SET NOCOUNT ON;
+
+                    DECLARE @Offset INT
+                    SET @Offset = (@PageNumber - 1) * @PageSize
+
+                    SELECT 
+                        Id,
+                        Title,
+                        IsCompleted,
+                        DateCreated
+                    FROM 
+                        ToDoItems
+                    ORDER BY 
+                        DateCreated DESC
+                    OFFSET @Offset ROWS
+                    FETCH NEXT @PageSize ROWS ONLY;
+                END";
+
+                connection.Execute(createProcedureSql);
+            }
+        }
+    }
+
+    public IEnumerable<ToDoItem> GetPagedToDoItems(int pageSize, int pageNumber)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            connection.Open();
+
+            // Define parameters
+            var parameters = new DynamicParameters();
+            parameters.Add("@PageNumber", pageNumber);
+            parameters.Add("@PageSize", pageSize);
+
+            // Call the stored procedure
+            var toDoItems = connection.Query<ToDoItem>("GetPagedToDoItems", parameters, commandType: CommandType.StoredProcedure);
+
+            return toDoItems;
+        }
     }
 
     public void EnsureGetUnfinishedTodosStoredProcedureExists()

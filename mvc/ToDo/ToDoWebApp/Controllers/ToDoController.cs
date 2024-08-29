@@ -13,7 +13,8 @@ namespace ToDo.Controllers
         [HttpGet]
         public IActionResult GetTodos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var res = _todoListService.GetPagedItemList(pageSize, page);
+            //var res = _todoListService.GetPagedItemList(pageSize, page);
+            var res = _dapperRepository.GetPagedToDoItems(pageSize, page);
             return Ok(res);
         }
 

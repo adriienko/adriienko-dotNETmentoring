@@ -11,5 +11,7 @@ namespace ToDo.Models
         public string Title { get; set; }
 
         public bool IsCompleted { get; set; } = false;
+
+        public DateTime DateCreated { get; set; } = DateTime.UtcNow;
     }
 }
